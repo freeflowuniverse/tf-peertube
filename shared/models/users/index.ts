@@ -1,4 +1,5 @@
 export * from './user-create.model'
+export * from './user-threefold.model'
 export * from './user-flag.model'
 export * from './user-login.model'
 export * from './user-notification-setting.model'

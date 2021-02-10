@@ -91,6 +91,7 @@
 
       <div *ngIf="!isLoggedIn" class="login-buttons-block">
         <a i18n routerLink="/login" class="login-button">Login</a>
+        <a i18n (click)="openThreefoldConnect()" class="login-button">Threefold Connect</a>
         <a i18n *ngIf="isRegistrationAllowed()" routerLink="/signup" class="create-account-button">Create an account</a>
       </div>
 

@@ -26,6 +26,7 @@ type UserLoginWithUserInformation = UserLoginWithUsername & User
 export class AuthService {
   private static BASE_CLIENT_URL = environment.apiUrl + '/api/v1/oauth-clients/local'
   private static BASE_TOKEN_URL = environment.apiUrl + '/api/v1/users/token'
+  private static BASE_EXTERNAL_TOKEN_URL = environment.apiUrl + '/api/v1/users/verify-external-token'
   private static BASE_REVOKE_TOKEN_URL = environment.apiUrl + '/api/v1/users/revoke-token'
   private static BASE_USER_INFORMATION_URL = environment.apiUrl + '/api/v1/users/me'
   private static LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
@@ -156,6 +157,29 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, objectToUrlEncoded(body), { headers })
+               .pipe(
+                 map(res => Object.assign(res, { username })),
+                 mergeMap(res => this.mergeUserInformation(res)),
+                 map(res => this.handleLogin(res)),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
+  }
+
+  loginWithExternalAuth(signedAttempt: string){
+    let state = peertubeLocalStorage.getItem("state")
+    const body = {
+      client_id: this.clientId,
+      client_secret: this.clientSecret,
+      response_type: 'code',
+      grant_type: 'password',
+      scope: 'upload',
+      signedAttempt: signedAttempt,
+      state: state,
+      password: '2ola1234'
+    }
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+    return this.http.post<UserLogin>(AuthService.BASE_EXTERNAL_TOKEN_URL, objectToUrlEncoded(body), { headers })
                .pipe(
                  map(res => Object.assign(res, { username })),
                  mergeMap(res => this.mergeUserInformation(res)),
