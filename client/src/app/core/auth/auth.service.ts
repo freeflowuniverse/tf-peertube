@@ -167,6 +167,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
 
   loginWithExternalAuth(signedAttempt: string){
     let state = peertubeLocalStorage.getItem("state")
+    let username = JSON.parse(decodeURIComponent(signedAttempt)).doubleName
     const body = {
       client_id: this.clientId,
       client_secret: this.clientSecret,
@@ -175,6 +176,7 @@ Ensure you have correctly configured PeerTube (config/ directory), in particular
       scope: 'upload',
       signedAttempt: signedAttempt,
       state: state,
+      username: username,
       password: '2ola1234'
     }
 
