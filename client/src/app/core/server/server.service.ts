@@ -5,7 +5,7 @@ import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { getDevLocale, isOnDevLocale, sortBy } from '@app/helpers'
 import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 import { getCompleteLocale, isDefaultLocale, peertubeTranslate } from '@shared/core-utils/i18n'
-import { SearchTargetType, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
+import { ThreefoldURL, SearchTargetType, ServerConfig, ServerStats, VideoConstant } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
@@ -15,6 +15,7 @@ export class ServerService {
   private static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
   private static BASE_STATS_URL = environment.apiUrl + '/api/v1/server/stats'
+  private static BASE_THREEFOLD_URL = environment.apiUrl + '/api/v1/users/external'
 
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
@@ -287,6 +288,10 @@ export class ServerService {
 
   getServerStats () {
     return this.http.get<ServerStats>(ServerService.BASE_STATS_URL)
+  }
+
+  getThreefoldConnectURL () {
+    return this.http.get<ThreefoldURL>(ServerService.BASE_THREEFOLD_URL)
   }
 
   getDefaultSearchTarget (): Promise<SearchTargetType> {

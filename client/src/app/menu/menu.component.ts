@@ -10,6 +10,7 @@ import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
 import { NgbDropdown, NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap'
+import { peertubeLocalStorage } from '@root-helpers/peertube-web-storage'
 
 const logger = debug('peertube:menu:MenuComponent')
 
@@ -135,6 +136,13 @@ export class MenuComponent implements OnInit {
   isRegistrationAllowed () {
     return this.serverConfig.signup.allowed &&
       this.serverConfig.signup.allowedForCurrentIP
+  }
+  
+  openThreefoldConnect(){
+    this.serverService.getThreefoldConnectURL().subscribe(res => {
+      peertubeLocalStorage.setItem("state", res.state)
+      window.location.href = res.url
+    })
   }
 
   getFirstAdminRightAvailable () {

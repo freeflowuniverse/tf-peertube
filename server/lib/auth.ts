@@ -119,7 +119,7 @@ async function onExternalUserAuthenticated (options: {
 
 // ---------------------------------------------------------------------------
 
-export { oAuthServer, handleLogin, onExternalUserAuthenticated, handleTokenRevocation }
+export { forwardTokenReq, oAuthServer, handleLogin, onExternalUserAuthenticated, handleTokenRevocation }
 
 // ---------------------------------------------------------------------------
 

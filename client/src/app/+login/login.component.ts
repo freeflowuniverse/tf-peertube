@@ -68,7 +68,25 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     return this.serverConfig.email.enabled === false
   }
 
+  getQueryParams(qs: string) {
+    qs = qs.split('+').join(' ');
+
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+
+    return params;
+  }
+  
   ngOnInit () {
+    let params = this.getQueryParams(document.location.search)
+    if('signedAttempt' in params){
+      this.loginWithThreefold(params['signedAttempt'])
+    }
     const snapshot = this.route.snapshot
 
     // Avoid undefined errors when accessing form error properties
@@ -112,6 +130,17 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     const { username, password } = this.form.value
 
     this.authService.login(username, password)
+      .subscribe(
+        () => this.redirectService.redirectToPreviousRoute(),
+
+        err => this.handleError(err)
+      )
+  }
+
+  loginWithThreefold (signedAttempt: string) {
+    this.error = null
+
+    this.authService.loginWithExternalAuth(signedAttempt)
       .subscribe(
         () => this.redirectService.redirectToPreviousRoute(),
 
