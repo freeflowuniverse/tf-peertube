@@ -1,4 +1,5 @@
 export interface ThreefoldURL {
-    url: string
+    url: string;
+    state: string;
 }
   
