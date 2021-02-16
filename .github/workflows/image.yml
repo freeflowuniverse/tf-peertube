@@ -27,6 +27,7 @@ jobs:
         with:
           push: true
           tags: omarelawady/peertube:threefold
+          file: support/docker/production/Dockerfile.buster
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
