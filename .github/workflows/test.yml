@@ -3,7 +3,7 @@ name: Test Suite
 on:
   push:
     branches:
-      - develop
+      - develop_threefold_login
       - master
   pull_request:
     types: [synchronize, opened]
