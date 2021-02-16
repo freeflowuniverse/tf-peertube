@@ -3,7 +3,7 @@ name: Test Suite
 on:
   push:
     branches:
-      - develop
+      - develop_threefold_login
       - master
       - ci
   pull_request:
