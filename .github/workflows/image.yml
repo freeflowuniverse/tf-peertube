@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: omarelawady/peertube:threefold
+          tags: threefolddev/tf-peertube:tfconnect
           file: support/docker/production/Dockerfile.buster
           build-args: |
             NPM_RUN_BUILD_OPTS=--light
