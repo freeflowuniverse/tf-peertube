@@ -28,8 +28,6 @@ jobs:
           push: true
           tags: threefolddev/tf-peertube:tfconnect
           file: support/docker/production/Dockerfile.buster
-          build-args: |
-            NPM_RUN_BUILD_OPTS=--light
       -
         name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
