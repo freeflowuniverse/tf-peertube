@@ -63,7 +63,8 @@ function get<T>(url): Promise<T> {
             if (error) reject(error);
             if (response.statusCode != 200) {
                 reject('Invalid status code <' + response.statusCode + '>');
-            }
+	    	return
+	    }
             let res = JSON.parse(body)
             resolve(res);
         });
@@ -76,7 +77,8 @@ function post<T>(url, params): Promise<T> {
             if (error) reject(error);
             if (response.statusCode != 200) {
                 reject('Invalid status code <' + response.statusCode + '>: ' + body );
-            }
+	    	return
+	    }
             let res = JSON.parse(body)
             resolve(res);
         });
@@ -138,7 +140,7 @@ async function verify(req: express.Request, res: express.Response, next: express
     return forwardTokenReq(req, res, next)
   }catch(error){
     console.log(error)
-
+    return res.json({error: "Verification failed"})
   }
 }
 
