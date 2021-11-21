@@ -1,0 +1,63 @@
+version: "3.3"
+
+services:
+
+  peertube:
+    # If you don't want to use the official image and build one from sources:
+    # build:
+    #   context: .
+    #   dockerfile: ./support/docker/production/Dockerfile.buster
+    image: threefolddev/tf-peertube:tfconnect
+    # Use a static IP for this container because nginx does not handle proxy host change without reload
+    # This container could be restarted on crash or until the postgresql database is ready for connection
+    networks:
+      default:
+        ipv4_address: 172.18.0.42
+    env_file:
+      - .env
+
+    ports:
+     - "1935:1935" # If you don't want to use the live feature, you can comment this line
+     - "9000:9000" # If you provide your own webserver and reverse-proxy, otherwise not suitable for production
+    volumes:
+      - assets:/app/client/dist
+      - ./docker-volume/data:/data
+      - ./docker-volume/config:/config
+    depends_on:
+      - postgres
+      - redis
+      - postfix
+    restart: "always"
+
+  postgres:
+    image: postgres:13-alpine
+    env_file:
+      - .env
+    volumes:
+      - ./docker-volume/db:/var/lib/postgresql/data
+    restart: "always"
+
+  redis:
+    image: redis:6-alpine
+    volumes:
+      - ./docker-volume/redis:/data
+    restart: "always"
+
+  postfix:
+    image: mwader/postfix-relay
+    env_file:
+      - .env
+    volumes:
+      - ./docker-volume/opendkim/keys:/etc/opendkim/keys
+    restart: "always"
+
+networks:
+  default:
+    ipam:
+      driver: default
+      config:
+      - subnet: 172.18.0.0/16
+
+volumes:
+  assets:
+
