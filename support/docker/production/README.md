@@ -1,10 +1,10 @@
 # Deployment
 
-This is the setup steps to expose a peertube instance over http://0.0.0.0:9000. A separate reverse proxy should be created with the domain speciied in the config below forwarding the traffic to the peretube instance endpoint.
+These are the setup steps to expose a peertube instance over http://0.0.0.0:9000. A separate reverse proxy should be created with the domain speciied in the config below forwarding the traffic to the peretube instance endpoint.
 
-docker compose file typical [setup](./docker-compose-without-reverse-proxy.yml)
+docker compose file typical [setup](./docker-compose-without-reverse-proxy.yml). Should be copied over `docker-compose.yml`
 
-Peertube webserver info:
+Peertube environment file variables (can be found in `.env` file):
 
 ```yaml 
 POSTGRES_USER=postgres
